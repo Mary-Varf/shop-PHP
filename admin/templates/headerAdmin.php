@@ -19,7 +19,6 @@
         <a href="/authorization/" class="auth-user" id="auth-go">Авторизация</a>';
       }
       ?>
-  </nav>
 </header>
 <script>
   const enterBlock = document.querySelector('#auth-user');

@@ -22,8 +22,25 @@ $data = getUsersInfo();
 <section class="shop-page__order">
     <div class="shop-page__wrapper">
       <h2 class="h h--1">Оформление заказа</h2>
-      <?=(is_array($data) > 0 ? '' : '<h3 class="red">Для совершения покупки Вам необходимо авторизоваться</h3><br><a href="/authorization/index.php?productID=' . $_GET['productID'] .'" class="button">Авторизоваться</a><br><br>')?>
-      <form action="" method="post" class="custom-form js-order" id='order_good_form'>
+      <?
+        if (!isset($_COOKIE['login']) || !isset($_SESSION['password']) || !isset($_GET['productID'])) {
+          if (isset($_GET)) {
+            $href = '';
+            foreach($_GET as $key => $val) {
+              $href = $href . '&' . $key . '=' . $val;
+            }
+            $href = substr($href, 1);
+          }
+          echo 
+          '<h3 class="red">Для совершения покупки Вам необходимо авторизоваться</h3>
+          <br><a href="/authorization/?' . $href .'" class="button">Авторизоваться</a><br><br>
+          <form action="" method="post" class="custom-form js-order" id="order_good_form" hidden>
+          ';
+        } else {
+          echo '<form action="" method="post" class="custom-form js-order" id="order_good_form">';
+        }
+      ?>
+      
         <fieldset class="custom-form__group">
           <legend class="custom-form__title">Укажите свои личные данные</legend>
           <p class="custom-form__info">

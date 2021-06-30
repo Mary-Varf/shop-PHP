@@ -60,7 +60,7 @@ function createProductsTable ($array)
         
           <b class="product-item__name">' . $val['name'] . '</b>
           <span class="product-item__field">' . $val['ID'] . '</span>
-          <span class="product-item__field">' . $val['price'] . ' руб.</span>
+          <span class="product-item__field">' . number_format($val['price'],0,'',' ') . ' руб.</span>
           <span class="product-item__field">' . $val['category'] . '</span>
           <span class="product-item__field">' . $new . '</span>
           <span class="product-item__field">' . $sale . '</span>

@@ -1,5 +1,8 @@
 
-<?include $_SERVER['DOCUMENT_ROOT'] . '/templates/menu/createLi.php';?>
+<?
+  include $_SERVER['DOCUMENT_ROOT'] . '/templates/menu/createLi.php';
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -44,7 +47,6 @@
       <a href="/authorization/" class="auth-user" id="auth-go">Авторизация</a>';
     }
     ?>
-</nav>
 </header>
 <script>
   const enterBlock = document.querySelector('#auth-user');

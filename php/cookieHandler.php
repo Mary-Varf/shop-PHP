@@ -3,7 +3,7 @@
 namespace cookieHandler;
 
 session_name('session_id');
-session_set_cookie_params(60*200);
+session_set_cookie_params(60 * 200);
 session_start();
 error_reporting(E_ALL);
 
@@ -44,10 +44,10 @@ function deleteSession()
 function createCookie($data)
 {
         if (isset($data['login'])) {
-            setcookie('login', $data['login'], time() + 60*60*24*31, "/");
+            setcookie('login', $data['login'], time() + 60 * 60 * 24 * 31, "/");
         }
         if(isset($data['name'])) {
-            setcookie('name', $data['name'], time() + 60*60*24*31, "/");
+            setcookie('name', $data['name'], time() + 60 * 60 * 24 * 31, "/");
         }
     
 }
@@ -58,7 +58,7 @@ function createCookie($data)
 function createCookieAddChange($str)
 {
         if (isset($str)) {
-            setcookie('add/change', $str, time() + 60*60*24*31, "/");
+            setcookie('add/change', $str, time() + 60 * 60 * 24 * 31, "/");
         }
     
 }

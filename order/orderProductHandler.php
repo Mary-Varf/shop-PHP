@@ -11,7 +11,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/order/msg.php';
 function orderProduct($msg)
 { 
   include $_SERVER['DOCUMENT_ROOT'] . '/php/serverCred.php';
-  include $_SERVER['DOCUMENT_ROOT'] . '/php/const.php';
+
   $message = '';
   if (isset($_POST['surname']) && isset($_GET['productID'])) {
     $connect = new mysqli($host, $user, $passwordSql, $dbname);
@@ -24,11 +24,6 @@ function orderProduct($msg)
         $message = createMsg($msg[2]);
       } else {
         
-        $surname = $connect->real_escape_string($_POST['surname']);
-        $name = $connect->real_escape_string($_POST['name']);
-        $thirdName = $connect->real_escape_string($_POST['thirdName']);
-        $phone = $connect->real_escape_string($_POST['phone']);
-        $email = $connect->real_escape_string($_POST['email']);
         $delivery = $connect->real_escape_string($_POST['delivery']);
         $city = $connect->real_escape_string($_POST['cityD']);
         $street = $connect->real_escape_string($_REQUEST["streetD"]);
@@ -55,9 +50,9 @@ function orderProduct($msg)
 
               if (is_array($data)) {
 
-                $prodId = substr($_GET['productID'], 14);
+                $prodId = $connect->real_escape_string(intval(substr($_GET['productID'], 14)));
 
-                $resultPrice = mysqli_query($connect, "SELECT price FROM `goods` WHERE id='$prodId';");
+                $resultPrice = mysqli_query($connect, "SELECT price FROM `goods` WHERE id=$prodId;");
                 while($row = mysqli_fetch_assoc($resultPrice)) {
                   $price = $row['price'];
                 }; 
@@ -113,16 +108,16 @@ function getUsersInfo ()
     return false;
   } else { 
     $result = mysqli_query($connect, "SELECT * FROM users
-    where login = '$login' and password = '$password';");
+    where login = '$login'");
       if($result -> num_rows > 0) {
         $data = $result->fetch_array();
       } else {
         return false;
       }
+      if ($data['password'] == $password) {
+        return $data;
+      }
   }
-  
-  return $data;
-
   mysqli_close($connect);
 }
 

@@ -45,10 +45,6 @@ function createGoodsArray ()
       left join category_good as cg on goods.id = cg.goods_id
       left join categories as ct on cg.categories_id = ct.id ' . $lineConcat) : ($line = 'SELECT distinct goods.id, goods.name, price, img FROM goods');
       
-      // if(!isset($_GET['cat']) || !isset($_GET['category'])) {
-      //   $line = "SELECT goods.name, goods.id, price, img FROM goods " . $lineConcat;
-      // }
-      
     } else {
       $line = 'SELECT distinct goods.id, goods.name, price, img FROM goods';
     }
@@ -175,8 +171,8 @@ function createGoodsDivs ($page,$array)
         <div class='product__image'>
           <img src='" . $val['img'] . "' alt='" . $val['name'] . "'>
         </div>
-        <p class='product__name'>" . $val['name'] . "</p>
-        <span class='product__price'>" . $val['price'] . " руб.</span>
+        <h4 class='product__name'>" . $val['name'] . "</h4>
+        <span class='product__price'>" . number_format($val['price'],0,'',' ') . " руб.</span>
         
       </article>";
     }
@@ -185,41 +181,41 @@ function createGoodsDivs ($page,$array)
 } 
 
 /**
- * функция  выводит лишки с номерами страниц (1 до, 1 после и активную)
+ * функция  выводит лишки с номерами страниц (5 до, 5 после и активную)
  * @param массив с товарами
  * @param строку с номером страницы
  */
 function createPagination ($array, $page) 
 {
   $pagesNumber = ceil(count($array) / 9);
-  
-  for ($i = 1; $i <= $pagesNumber; $i++) {
-    $href = ((isset($_GET) && !empty($_GET)) ? ($_SERVER['REQUEST_URI'] . '&page=' . $i) : ('/?page=' . $i));
-    if($i == $page) {
-      echo '
-        <li>
-          <a class="paginator__item " style="background-color:#E45446; color:#fff" href="' . $href . '">' . $i .'</a>
-        </li>
-      ';
-    } elseif ($i == '1' && $i != $page && $i != $page - 1) {
-      echo '
-        <li>
-          <a class="" style="margin: 0 30px; justify-content: center"  href="' . $href . '">В начало</a>
-        </li>
-      ';      
-    } elseif ( $i == $pagesNumber && $i != $page && $i != $page + 1) {
-      echo '
-        <li>
-          <a class="" style="margin: 0 30px;"  href="' . $href . '">В конец</a>
-        </li>
-      ';      
-    } elseif ($i == $page + 1 || $i == $page - 1) {
-      echo '
-        <li>
-          <a class="paginator__item" href="' . $href . '">' . $i .'</a>
-        </li>
-      ';
+  if (isset($_GET) && !empty($_GET)) {
+    $href = '/?';
+    $get = '';
+    foreach($_GET as $key => $val) {
+      if ($key != 'page') {
+        $get = $get . $key . '=' . $val . '&'; 
+      }
     }
+    $href = $href . $get . 'page=';
+  } else {
+    $href = '/?page=';
+  }
+  for ($i = 1; $i <= $pagesNumber; $i++) {
+
+    if ($i == $page) {
+      echo '
+        <li>
+          <a class="paginator__item " style="background-color:#E45446; color:#fff" href="' . $href . $i . '">' . $i .'</a>
+        </li>
+      ';
+    } elseif (($i <= $page + 5) && ($i >= $page - 5) ) {
+      echo '
+        <li>
+          <a class="paginator__item" href="' . $href . $i . '">' . $i .'</a>
+        </li>
+      ';
+    } 
+
   }
 }
 
@@ -230,17 +226,60 @@ function createPagination ($array, $page)
 
 function countPrices()
 {
+ $maximum = 100000;
+ $minimum = 0;
+  $arr = [];
+  $line = '';
+  $add = '';
+  
+  if (isset($_GET)) {
+
+    if (!isset($_GET['cat'])) {
+      $clearGet = $_GET;
+    }   else {
+    ($_GET['cat'] == '') ? ($clearGet = array_diff($_GET, array(''))) : ($clearGet = $_GET); 
+    }
+    
+    foreach($clearGet as $key => $val) {
+        if (($key == 'cat' || $key == 'category') && $val != '') {
+          $add = 'ct.name = "' . $val . '"';
+        } elseif ($key == 'new') {
+          $add = 'goods.new = "' . $val . '"';
+        } elseif ($key == 'sale') {
+          $add = 'goods.sale = "' . $val . '"';
+        } elseif ($key == 'minprice' && $val != '') {
+          $add = 'goods.price >= "' . $minimum . '"';
+        } elseif ($key == 'maxprice' && $val != '') {
+          $add = 'goods.price <= "' . $maximum  . '"';
+        } else {
+          continue;
+        }
+
+        array_push($arr, $add);
+      
+    }
+    
+    $lineConcat = implode(' and ', $arr);
+    $lineConcat = (strlen($lineConcat) > 0) ? ($line = ' where ' . $lineConcat) : '';
+    
+    (strlen($line) > 0) ? ($line = 'SELECT  MAX(price) AS maxPrice, MIN(price) AS minPrice FROM goods  
+    left join category_good as cg on goods.id = cg.goods_id
+    left join categories as ct on cg.categories_id = ct.id ' . $lineConcat) : ($line = 'SELECT  MAX(price) AS maxPrice, MIN(price) AS minPrice FROM goods ');
+    
+  } else {
+    $line = 'SELECT  MAX(price) AS maxPrice, MIN(price) AS minPrice FROM goods ';
+  }
   include $_SERVER['DOCUMENT_ROOT'] . '/php/serverCred.php';
   $connect = new mysqli($host, $user, $passwordSql, $dbname);
+  
   mysqli_set_charset($connect,'utf8'); 
-
   if(mysqli_connect_errno()) {
  
-    return  $prices = [0, 1000000];;
+    return  $prices =  ["maxPrice"=> $maximum, "minPrice"=> $minimum ];
 
   } else {
     
-    $result = mysqli_query($connect, "SELECT MAX(price) AS maxPrice, MIN(price) AS minPrice FROM goods");
+    $result = mysqli_query($connect, $line);
     $prices = [];
 
     while($row = mysqli_fetch_assoc($result)) {

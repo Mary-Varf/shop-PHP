@@ -9,7 +9,7 @@ $msg = [
     [
         'btnText' => 'Продолжить покупки',
         'h2' => 'Спасибо за заказ!<br> С Вами свяжутся в ближайшее время',
-        'path' => '/',
+        'path' => '*',
     ],
     [
         'btnText' => 'Вернуться',
@@ -43,8 +43,16 @@ function createMsg($msg)
     $btnText = $msg['btnText'];
 
     $path = ($msg['path'] == '' ? $_SERVER['REQUEST_URI'] : $msg['path']);
+    if ($msg['path'] == '*') {
+        $href = '';
+        foreach($_GET as $key => $val) {
+            $href = $href . '&' . $key . '=' . $val;
+        }
+        $href = substr($href, 1);
+        $path = '/?' . $href;
+    }
     $errorText = $msg['h2'];
-    echo '    
+    return '    
     <section class="shop-page__popup-end">
         <div class="shop-page__wrapper shop-page__wrapper--popup-end">
         <p class="shop-page__end-message">' . $errorText . '</p>

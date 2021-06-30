@@ -10,12 +10,12 @@ $menu = [
     [
         'name' => 'Новинки',
         'title' => 'women',
-        'path' => '/index.php?new=1',
+        'path' => '/?new=1',
     ],
     [
         'name' => 'Sale',
         'title' => 'men',
-        'path' => '/index.php?sale=1',
+        'path' => '/?sale=1',
     ],
     [
         'name' => 'Доставка',
@@ -36,7 +36,7 @@ function createLi ($arr, $color)
 {
     echo "
         <li>
-            <a class='main-menu__item' " . $color .  " href=" . $arr['path'] . ">" . $arr['name'] ."</a>
+            <a class='main-menu__item' " . $color .  " href='" . $arr['path'] . "'>" . $arr['name'] ."</a>
         </li>
     ";
 

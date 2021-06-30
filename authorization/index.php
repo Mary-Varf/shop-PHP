@@ -58,8 +58,8 @@ loginBtn.addEventListener('click', (e)=>{
             window.location.href = "/admin/"; 
           } else if (data.roles_id == '2') {
             window.location.href = "/admin/"; 
-          } else if (data.roles_id == '3' && data.productID) {
-            window.location.href = "/order/?productID=" + data.productID; 
+          } else if (data.roles_id == '3' && data.productID || data.roles_id == null) {
+            window.location.href = "/order/" + window.location.search; 
           } else  {
             window.location.href = "/";
           }

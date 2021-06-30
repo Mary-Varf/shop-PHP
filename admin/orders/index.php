@@ -56,7 +56,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/admin/orders/ordersListHandler.php';
             statusContainer.classList.remove('green');
             statusContainer.classList.add('red');
           }
-          parent.append(child);
+          // parent.append(child);
             
         }
         if (!data) {

@@ -1,6 +1,6 @@
 <?
   include $_SERVER['DOCUMENT_ROOT'] . '/php/cookieHandler.php';
-  include $_SERVER['DOCUMENT_ROOT'] . '/php/const.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 ?>
 <!DOCTYPE html>
 <html lang="ru">
