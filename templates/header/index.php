@@ -18,7 +18,7 @@
   <link rel="preload" href="/img/intro/coats-2018.jpg" as="image">
 
   <link rel="icon" href="/img/favicon.png">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/style.min.css">
 
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>

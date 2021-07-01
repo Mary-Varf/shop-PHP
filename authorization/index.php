@@ -11,7 +11,7 @@
   <meta name="theme-color" content="#393939">
 
   <link rel="icon" href="/img/favicon.png">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/style.min.css">
   <script defer src="/js/jquery-3.5.1.min.js"></script>
   <!-- <script src="/js/scripts3.js" defer=""></script> -->
 </head>
@@ -57,7 +57,7 @@ loginBtn.addEventListener('click', (e)=>{
           if (data.roles_id == '1') {
             window.location.href = "/admin/"; 
           } else if (data.roles_id == '2') {
-            window.location.href = "/admin/"; 
+            window.location.href = "/admin/orders/"; 
           } else if (data.roles_id == '3' && data.productID || data.roles_id == null) {
             window.location.href = "/order/" + window.location.search; 
           } else  {

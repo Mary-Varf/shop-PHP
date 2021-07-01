@@ -9,7 +9,7 @@ function createProductsArray ()
    
     $line = 'SELECT goods.id as ID, goods.name as name, price, ct.ru_name as category, new, sale FROM goods 
     left join category_good as cg on goods.id = cg.goods_id
-    left join categories as ct on cg.categories_id = ct.id order by ID';
+    left join categories as ct on cg.categories_id = ct.id order by ID desc';
     
     $connect = new mysqli($host, $user, $passwordSql, $dbname);
     mysqli_set_charset($connect,'utf8'); 
@@ -25,11 +25,21 @@ function createProductsArray ()
       while($row = mysqli_fetch_assoc($result)) {
           array_push($goodsList, $row);
       }; 
-      return $goodsList;
-    } 
+      
+      for ($i = count($goodsList) - 1; $i >= 0; $i--) {
+        if ($i >= 1) {
+          if ($goodsList[$i]['ID'] == $goodsList[$i - 1]['ID']) {
+            $goodsList[$i - 1]['category'] = $goodsList[$i]['category'] . ', ' . $goodsList[$i - 1]['category'];
+            unset($goodsList[$i]);
+          }
+        }
+
+      }
+    }
+    return $goodsList;
+
     mysqli_close($connect);
 
-  
 }
 /**
  * функция  возвращает данные таблицы с товарами
@@ -45,7 +55,7 @@ function createProductsTable ($array)
     <span class="page-products__header-field">Название товара</span>
     <span class="page-products__header-field">ID</span>
     <span class="page-products__header-field">Цена</span>
-    <span class="page-products__header-field">Категория</span>
+    <span class="page-products__header-field">Категории</span>
     <span class="page-products__header-field">Новинка</span>
     <span class="page-products__header-field">Акция</span>
   </div>
@@ -60,7 +70,7 @@ function createProductsTable ($array)
         
           <b class="product-item__name">' . $val['name'] . '</b>
           <span class="product-item__field">' . $val['ID'] . '</span>
-          <span class="product-item__field">' . number_format($val['price'],0,'',' ') . ' руб.</span>
+          <span class="product-item__field">' . number_format($val['price'],2,',',' ') . '</span>
           <span class="product-item__field">' . $val['category'] . '</span>
           <span class="product-item__field">' . $new . '</span>
           <span class="product-item__field">' . $sale . '</span>

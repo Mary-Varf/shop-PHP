@@ -35,7 +35,7 @@ if (!isset($_COOKIE['login']) || !isset($_SESSION['roles_id'])) {
   <meta name="theme-color" content="#393939">
 
   <link rel="icon" href="/img/favicon.png">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/style.min.css">
 </head>
 <body>
 
@@ -45,8 +45,15 @@ if (!isset($_COOKIE['login']) || !isset($_SESSION['roles_id'])) {
 <main class="page-delivery">
   <h1 class="h h--1">Административный раздел</h1>
   <div><a class="page-delivery__button button" href="/admin/orders/">Заказы</a></div>
-  <div><a class="page-delivery__button button" href="/admin/products/">Товары</a></div>
-  <div><a class="page-delivery__button button" href="/admin/accessRights/">Права доступа</a></div>
+  <?
+    if (isset($_SESSION['roles_id']) && $_SESSION['roles_id'] == 1) {
+      echo '
+      <div><a class="page-delivery__button button" href="/admin/products/">Товары</a></div>
+      <div><a class="page-delivery__button button" href="/admin/accessRights/">Права доступа</a></div>
+      ';
+    }
+  ?>
+
   </section>
 </main>
 <?include $_SERVER['DOCUMENT_ROOT'] . '/admin/templates/footerAdmin.php'?>

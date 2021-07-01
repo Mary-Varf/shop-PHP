@@ -11,21 +11,48 @@ include $_SERVER['DOCUMENT_ROOT'] . '/php/serverCred.php';
 
 $connect = new mysqli($host, $user, $passwordSql, $dbname);
 mysqli_set_charset($connect,'utf8'); 
+/**
+ * функция возвращает строку со строкой(ссылка для переадресации с сохранением всех гетов)
+ */
 
-$ref = $_SERVER['HTTP_REFERER'];
-$headerLink = '';
-if (strpos($ref, 'php?')) {
-    $headerLink = 'Location: ' . $ref . '&error=';
-} else {
-    $headerLink = 'Location: ' . $ref . '?error=';
+function createHeaderLink()
+{
+    $ref = $_SERVER['HTTP_REFERER'];
+    $headerLink = '';
+    if (strpos($ref, 'php?')) {
+        $headerLink = 'Location: ' . $ref . '&error=';
+    } else {
+        $headerLink = 'Location: ' . $ref . '?error=';
+    }
+    return $headerLink;
 }
+/**
+ * возвращает тезультат внесения в бд или фолс
+ * @param string с ИД изменяемого/добавляемого товара
+ */
+function saveCategoryDB(string $id, $connect)
+{
+    if (!empty($_POST['category'])) {
+        $category = $_POST['category'];
+        foreach($category as $key => $val) {
+            $resultCat = mysqli_query($connect, "INSERT INTO `category_good` (`goods_id`, `categories_id`) VALUES ('$id', '$val');");
+        }
+    }
+    if ($resultCat) {
+        return $resultCat;
+    } else {
+        return false;
+    }
+    
+}
+
 if(mysqli_connect_errno()) {
-    header(($headerLink . '1'), true, 301);
+    header((createHeaderLink() . '1'), true, 301);
     echo json_encode(false);
 } else {
     if (isset($_POST['addProduct'])) {
-        if (!isset($_POST['productName']) || $_POST['productName'] == '' || !isset($_POST['productPrice']) || $_POST['productPrice'] == '')  {
-            header(($headerLink . '2'), true, 301);
+        if (!isset($_POST['productName']) || $_POST['productName'] == '' || !isset($_POST['productPrice']) || $_POST['productPrice'] == '' || !(isset($_POST['category'])) || empty($_POST['category']))  {
+            header((createHeaderLink() . '2'), true, 301);
             echo json_encode(false);
         } else {
             if (isset($_POST['id'])) {
@@ -46,24 +73,18 @@ if(mysqli_connect_errno()) {
             
             $oldImg = (isset($_POST['oldImg']) ? $connect->real_escape_string($_POST['oldImg']) : '0');
 
+
             
-            $category = (isset($_POST['category']) ? $_POST['category'] : []);
                 if (!empty($_POST['images']) && $_POST['images'][0] != '' && !isset($_POST['change'])) {
                         $filename = preg_replace("/[^a-z0-9\.-]/i", '', $_POST['images'][0]);
                         if (!empty($filename)) {
     
-                            $line = "INSERT INTO `goods` (`name`, `price`, `new`, `sale`, `img`) VALUES ('$name', '$price', '$new', '$sale', '/img/products/$filename');";
-                            $result = mysqli_query($connect, $line);
+                            $result = mysqli_query($connect, "INSERT INTO `goods` (`name`, `price`, `new`, `sale`, `img`) VALUES ('$name', '$price', '$new', '$sale', '/img/products/$filename');");
     
                             $insert_id = $connect->insert_id;
-                            if (count($category) > 0) {
-                                foreach($category as $key => $val) {
-                                    $line2 = "INSERT INTO `category_good` (`goods_id`, `categories_id`) VALUES ('$insert_id', '$val');";
-                                    $resultCat = mysqli_query($connect, $line2);
-                                }
-                            } else {
-                                $resultCat = true;
-                            }
+
+                            $resultCat = saveCategoryDB($insert_id, $connect);
+   
                             if($result && $resultCat) {
                                 if (!empty($filename) && is_file($tmp_path . $filename)) {
                                     
@@ -77,7 +98,7 @@ if(mysqli_connect_errno()) {
                                 echo json_encode(true);
                                 echo json_encode('Изменения внесены');
                             } else {
-                                header(($headerLink . '3'), true, 301);
+                                header((createHeaderLink() . '3'), true, 301);
                                 echo json_encode(false);
                             }
                         }
@@ -85,18 +106,12 @@ if(mysqli_connect_errno()) {
                     
                 } elseif (isset($_POST['change'])  && !empty($_POST['images']) && $_POST['images'] != '') {
                     $filename = preg_replace("/[^a-z0-9\.-]/i", '', $_POST['images'][0]);
-                    $line = "UPDATE `goods` SET `name` = '$name', `price` = '$price', `new` = '$new', `sale`='$sale', `img` = '/img/products/$filename' WHERE (`id` = '$id');";
-                    $result = mysqli_query($connect, $line);
+
+                    $result = mysqli_query($connect, "UPDATE `goods` SET `name` = '$name', `price` = '$price', `new` = '$new', `sale`='$sale', `img` = '/img/products/$filename' WHERE (`id` = '$id');");
     
                     $resultDelCat = mysqli_query($connect, "DELETE FROM `category_good` WHERE (`goods_id` = '$id');");
     
-                    if (count($category) > 0) {
-                        foreach($category as $key => $val) {
-                            $resultCat = mysqli_query($connect, "INSERT INTO `category_good` (`goods_id`, `categories_id`) VALUES ('$id', '$val');");
-                        }
-                    } else {
-                        $resultCat = true;
-                    }
+                    $resultCat = saveCategoryDB($id, $connect);
     
                     if($result && $resultCat && $resultDelCat) {
                         if (("/img/products/" . $_POST['images'][0]) != $oldImg) {
@@ -115,19 +130,19 @@ if(mysqli_connect_errno()) {
                         echo json_encode(true);
                         echo json_encode("Изменения внесены (Изменен)");
                     }  else {
-                        header(($headerLink . '4'), true, 301);
+                        header((createHeaderLink() . '4'), true, 301);
                         echo json_encode(false);
                     }
 
                 } else {
-                    header(($headerLink . '5'), true, 301);
+                    header((createHeaderLink() . '5'), true, 301);
                     echo json_encode(false);
                 }
         }
         
        
     } else {
-        header(($headerLink . '6'), true, 301);
+        header((createHeaderLink() . '6'), true, 301);
         echo json_encode(false);
     }
 }

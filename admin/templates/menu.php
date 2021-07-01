@@ -26,6 +26,7 @@ $menuAdmin = [
 
 function createLi ($arr, $color) 
 {
+
     echo "
         <li>
             <a class='main-menu__item' " . $color .  " href=" . $arr['path'] . ">" . $arr['name'] ."</a>
@@ -57,25 +58,30 @@ function createMenu(array $menu, $str)
 
 function menuList($menu, $menuLength)
 {
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/php/cookieHandler.php';
     foreach($menu as $key => $val) {
-
-        if ($key + 1 <= $menuLength)  {
-            if ( strlen($_SERVER['REQUEST_URI']) == 1 || $_SERVER['REQUEST_URI'][1] == '?') {
-                if ($key < 1) {
-                    createLi($menu[0], "style='color:#E45446;'");
+        if (isset($_SESSION['roles_id']) && $_SESSION['roles_id'] == 1) {
+            if ($key + 1 <= $menuLength)  {
+                if ( strlen($_SERVER['REQUEST_URI']) == 1 || $_SERVER['REQUEST_URI'][1] == '?') {
+                    if ($key < 1) {
+                        createLi($menu[0], "style='color:#E45446;'");
+                    } else {
+                        createLi($val, '');
+                    }
                 } else {
-                    createLi($val, '');
+                    if ($_SERVER['REQUEST_URI'] == $val['path']) {
+                       createLi($val, "style='color:#E45446;'");
+                    } 
+                    else {
+                        createLi($val, '');
+                    }
                 }
             } else {
-                if ($_SERVER['REQUEST_URI'] == $val['path']) {
-                   createLi($val, "style='color:#E45446;'");
-                } 
-                else {
-                    createLi($val, '');
-                }
             }
         } else {
-
+            if ($key == 0) {
+                createLi($val, "style='color:#E45446;'");
+            }
         }
     } 
 }

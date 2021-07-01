@@ -16,7 +16,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/admin/accessRights/createUsersTable.p
   <meta name="theme-color" content="#393939">
 
   <link rel="icon" href="/img/favicon.png">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/style.min.css">
   <script defer src="/js/jquery-3.5.1.min.js"></script>
   <script defer src="/js/scripts3.js"></script>
 

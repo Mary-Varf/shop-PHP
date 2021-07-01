@@ -12,8 +12,17 @@
   <meta name="theme-color" content="#393939">
 
   <link rel="icon" href="/img/favicon.png">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/style.min.css">
+  <style>
+  .order-item__info__status.green{
+    color: green;
+  }
+  .order-item__info__status.red{
+    color:red;
+  }
+  </style>
 </head>
+
 <body>
 
 <?
@@ -34,7 +43,20 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/admin/orders/ordersListHandler.php';
 </body>
 <script>
 
+  const status = document.querySelectorAll('.order-item__info__status');
+    status.forEach(el => {
+        if (el.innerText == 'Обработан') {
+          el.style.color = 'green';
+        } else {
+          el.style.color = 'red';
+        }
+    })
+
+  
+
+            
   const changeStatusAjax = (id, status) => {
+    console.log(id, status)
       const block = document.querySelector('#change_id_' + id);
       const parent = block.parentNode;
       const statusContainer = parent.querySelector('.order-item__info__status');
@@ -50,13 +72,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/admin/orders/ordersListHandler.php';
           statusContainer.innerText='';
           statusContainer.innerText = data;
           if (data === 'Обработан') {
-            statusContainer.classList.remove('red');
-            statusContainer.classList.add('green');
+            statusContainer.style.color='green';
           } else {
-            statusContainer.classList.remove('green');
-            statusContainer.classList.add('red');
+            statusContainer.style.color='red';
           }
-          // parent.append(child);
             
         }
         if (!data) {

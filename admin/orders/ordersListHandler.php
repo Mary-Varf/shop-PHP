@@ -130,7 +130,7 @@ function getOrdersData()
             left join good_order as go on go.orders_id = i.orders_id 
             left join goods as g on go.goods_id = g.id
             left join users as u on u.id = orders.users_id
-            order by orders_id
+            order by orders_id desc
         
         ;");
         

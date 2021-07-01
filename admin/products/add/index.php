@@ -56,7 +56,7 @@ if (isset($_GET['change_id'])) {
   <meta name="theme-color" content="#393939">
 
   <link rel="icon" href="/img/favicon.png">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/style.min.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
@@ -131,7 +131,7 @@ if (isset($_GET['change_id'])) {
     <fieldset class="page-add__group custom-form__group">
       <legend class="page-add__small-title custom-form__title">Раздел</legend>
       <div class="page-add__select">
-        <select name="category[]" id='category' class="custom-form__select" multiple="multiple">          
+        <select name="category[]" id='category' class="custom-form__select" multiple="multiple" required>          
           <option hidden="">Название раздела</option>
           <?createCategoriesOptions((isset($data[0]['categories_id']) ? $data : []))?>
         </select>
