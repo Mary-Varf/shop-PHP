@@ -4,7 +4,7 @@
 
 <img src="./img/intro/img1.png" width="60%">
 
-<h2 align="center"><a  href="https://solitairevue.firebaseapp.com">Live Demo</a></h2>
+<h2 align="center"><a  href="https://iiwebdev.mcdir.ru/">Demo</a></h2>
 
 
 ## Description
