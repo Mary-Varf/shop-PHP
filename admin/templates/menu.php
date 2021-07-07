@@ -16,8 +16,6 @@ $menuAdmin = [
     ],
 ];
 
-
-
 /**
  * функция возвращает пункт меню
  * @param массив с меню
@@ -26,13 +24,11 @@ $menuAdmin = [
 
 function createLi ($arr, $color) 
 {
-
     echo "
         <li>
             <a class='main-menu__item' " . $color .  " href=" . $arr['path'] . ">" . $arr['name'] ."</a>
         </li>
     ";
-
 }
 
 /**
@@ -42,13 +38,9 @@ function createLi ($arr, $color)
 function createMenu(array $menu, $str)
 {
     echo "<ul class='main-menu main-menu--" . $str . "'>";
-
-        menuList($menu, 3);
-
+    menuList($menu, 3);
     echo "</ul>";
-
 }
-
 
 /**
  * функция возвращает меню с разной длиной в зависимости от статуса юзера
@@ -71,13 +63,11 @@ function menuList($menu, $menuLength)
                 } else {
                     if ($_SERVER['REQUEST_URI'] == $val['path']) {
                        createLi($val, "style='color:#E45446;'");
-                    } 
-                    else {
+                    } else {
                         createLi($val, '');
                     }
                 }
-            } else {
-            }
+            } else {}
         } else {
             if ($key == 0) {
                 createLi($val, "style='color:#E45446;'");

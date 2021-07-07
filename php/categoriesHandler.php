@@ -1,5 +1,4 @@
 <?php
-
 $categories = [
     [
         'name' => 'Все',
@@ -27,7 +26,6 @@ $categories = [
         'path' => '/?category=accessories',
     ],
 ];
-
 
 /**
  * функция возвращает лишки с категориями 

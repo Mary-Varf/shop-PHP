@@ -1,27 +1,22 @@
 <?php
-
+require_once $_SERVER['DOCUMENT_ROOT'] . '/php/cookieHandler.php';
 /**
  * функция возвращает массив со списком заявок (проверка на права)
  */
 function createList()
 {
-    
-  include $_SERVER['DOCUMENT_ROOT'] . '/php/serverCred.php';
-
-  if (isset($_SESSION['auth']) && isset($_COOKIE['login']) && isset($_SESSION['roles_id']) && $_SESSION['roles_id'] < 3) {
-
-    getOrdersData();
-
-  } else {
-    return '<h3 class="red">Необходимо авторизоваться, возможно, 
-    у вас не хватает прав доступа</h3>
-    <div><button class="page-delivery__button button" OnClick="history.back();">Назад</и></div>';
-  }
+    if (isset($_COOKIE['login']) && isset($_SESSION['roles_id']) && $_SESSION['roles_id'] < 3) {
+        getOrdersData();
+    } else {
+        return '<h3 class="red">Необходимо авторизоваться, возможно, 
+        у вас не хватает прав доступа</h3>
+        <div><button class="page-delivery__button button" OnClick="history.back();">Назад</и></div>';
+    }
 }
 
 /**
  * функция возвращает таблицу с данными о заявках
- * @param принимает массив с заявками
+ * @param массив с заявками
  */
 
 function showOrderInfo ($arr)
@@ -32,8 +27,7 @@ function showOrderInfo ($arr)
         $price = number_format($data['total_price'], 0, '', ' ');
         $phone = '+7 ' . number_format($data['phone'], 0, '', ' ');
         $status = ($data['status'] ? 'Обработан' : 'Не обработан');
-        echo '
-                            
+        echo '                
             <li class="order-item page-order__item">
             <div class="order-item__wrapper">
             <div class="order-item__group order-item__group--id">
@@ -89,7 +83,6 @@ function showOrderInfo ($arr)
         ';
         if (isset($data['comment'])) {
             echo '
-
                 </div>
                 <div class="order-item__wrapper">
                 <div class="order-item__group">
@@ -100,7 +93,6 @@ function showOrderInfo ($arr)
             ';
         }
         echo '</li>';
-
     }
 } 
 
@@ -109,40 +101,33 @@ function showOrderInfo ($arr)
  */
 function getOrdersData()
 {
-    include $_SERVER['DOCUMENT_ROOT'] . '/php/serverCred.php';
+    include $_SERVER['DOCUMENT_ROOT'] . '/connect.php';
 
-    $out[] = json_decode(file_get_contents('php://input'));
+    $connect = connectSQL();
 
-    $connect = new mysqli($host, $user, $passwordSql, $dbname);
-    mysqli_set_charset($connect,'utf8'); 
-
-    if(mysqli_connect_errno()) {
-                echo 'Возникла ошибка, повторите попытку позже';
+    if (mysqli_connect_errno()) {
+        echo 'Возникла ошибка, повторите попытку позже';
     } else {
-
-        $result = mysqli_query($connect, "SELECT orders.id as orders_id, i.payment, i.delivery, i.comment, 
-            g.id as good_id, g.name as good_name,  orders.total_price,
-            u.name, u.surname, u.patronymic, u.phone, orders.status,
-            a.city, a.street, a.building, a.flat
-            FROM orders 
-            left join info as i on orders.id=i.orders_id
-            left join address as a on i.orders_id = a.info_orders_id
-            left join good_order as go on go.orders_id = i.orders_id 
-            left join goods as g on go.goods_id = g.id
-            left join users as u on u.id = orders.users_id
-            order by orders_id desc
-        
+        $result = mysqli_query($connect, "SELECT orders.id AS orders_id, i.payment, i.delivery, i.comment, 
+        g.id AS good_id, g.name AS good_name,  orders.total_price,
+        u.name, u.surname, u.patronymic, u.phone, orders.status,
+        a.city, a.street, a.building, a.flat
+        FROM orders 
+        LEFT JOIN info as i on orders.id=i.orders_id
+        LEFT JOIN address AS a ON i.orders_id = a.info_orders_id
+        LEFT JOIN good_order AS go ON go.orders_id = i.orders_id 
+        LEFT JOIN goods AS g ON go.goods_id = g.id
+        LEFT JOIN users AS u ON u.id = orders.users_id
+        ORDER BY orders_id DESC
         ;");
         
-        if($result && $result->num_rows > 0) {
+        if ($result && $result->num_rows > 0) {
             $orders = [];
-
-            while($row = mysqli_fetch_assoc($result)) {
-                array_push($orders, $row);
-            }; 
             $executed = [];
             $notExecuted = [];
-
+            while($row = mysqli_fetch_assoc($result)) {
+                array_push($orders, $row);
+            }
             foreach($orders as $key => $val) {
                 if ($val['status'] == '0') {
                     array_push($notExecuted, $val);
@@ -150,7 +135,7 @@ function getOrdersData()
                     array_push($executed, $val);
                 }
             }
-
+            echo '<div><button class="page-delivery__button button" OnClick="history.back();">Назад</button></div><br>';
             echo '<div class="arrow-block" style="margin: 0 0 20px"><div class="arrow-area"><h2>Не обработаны:</h2><button class="order-item__toggle toggle__orders-22 arrow"></button></div><div class="show-list">';
             showOrderInfo($notExecuted);
             echo '</div></div>';
@@ -160,7 +145,6 @@ function getOrdersData()
         } else {
             echo ('Нет данных о заказе');
         }
-
     }
     mysqli_close($connect);
 }

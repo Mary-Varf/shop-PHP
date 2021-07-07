@@ -5,41 +5,29 @@
  */
 function createProductsArray ()
 {
-  include $_SERVER['DOCUMENT_ROOT'] . '/php/serverCred.php';
-   
-    $line = 'SELECT goods.id as ID, goods.name as name, price, ct.ru_name as category, new, sale FROM goods 
-    left join category_good as cg on goods.id = cg.goods_id
-    left join categories as ct on cg.categories_id = ct.id order by ID desc';
+    include $_SERVER['DOCUMENT_ROOT'] . '/connect.php';
+    $line = 'SELECT goods.id AS ID, goods.name AS name, price, ct.ru_name AS category, new, sale FROM goods 
+    LEFT JOIN category_good AS cg ON goods.id = cg.goods_id
+    LEFT JOIN categories AS ct ON cg.categories_id = ct.id ORDER BY ID DESC';
     
-    $connect = new mysqli($host, $user, $passwordSql, $dbname);
-    mysqli_set_charset($connect,'utf8'); 
-    if(mysqli_connect_errno()) {
-   
-      return  'Возникла ошибка, повторите попытку позже';
-
+    $connect = connectSQL();
+    if (mysqli_connect_errno()) {
+        return  'Возникла ошибка, повторите попытку позже';
     } else {
-      
-      $result = mysqli_query($connect, $line);
-      $goodsList = [];
-
-      while($row = mysqli_fetch_assoc($result)) {
-          array_push($goodsList, $row);
-      }; 
-      
-      for ($i = count($goodsList) - 1; $i >= 0; $i--) {
-        if ($i >= 1) {
-          if ($goodsList[$i]['ID'] == $goodsList[$i - 1]['ID']) {
-            $goodsList[$i - 1]['category'] = $goodsList[$i]['category'] . ', ' . $goodsList[$i - 1]['category'];
-            unset($goodsList[$i]);
-          }
+        $result = mysqli_query($connect, $line);
+        $goodsList = [];
+        while($row = mysqli_fetch_assoc($result)) {
+            array_push($goodsList, $row);
         }
-
-      }
+        for ($i = count($goodsList) - 1; $i >= 0; $i--) {
+            if ($i >= 1 && $goodsList[$i]['ID'] == $goodsList[$i - 1]['ID']) {
+                $goodsList[$i - 1]['category'] = $goodsList[$i]['category'] . ', ' . $goodsList[$i - 1]['category'];
+                unset($goodsList[$i]);
+            }
+        }
     }
-    return $goodsList;
-
     mysqli_close($connect);
-
+    return $goodsList;
 }
 /**
  * функция  возвращает данные таблицы с товарами
@@ -47,27 +35,25 @@ function createProductsArray ()
  */
 function createProductsTable ($array)
 {
-  echo '
-  <h1 class="h h--1">Товары</h1>
-  <a class="page-products__button button" href="/admin/products/add/">Добавить товар</a>
-  
-  <div class="page-products__header">
-    <span class="page-products__header-field">Название товара</span>
-    <span class="page-products__header-field">ID</span>
-    <span class="page-products__header-field">Цена</span>
-    <span class="page-products__header-field">Категории</span>
-    <span class="page-products__header-field">Новинка</span>
-    <span class="page-products__header-field">Акция</span>
-  </div>
-  <ul class="page-products__list" style="position:relative;">
- 
-  ';
+    echo '
+    <h1 class="h h--1">Товары</h1>
+    <a class="page-products__button button" href="/admin/products/add/">Добавить товар</a>
+    <div class="page-products__header">
+        <span class="page-products__header-field">Название товара</span>
+        <span class="page-products__header-field">ID</span>
+        <span class="page-products__header-field">Цена</span>
+        <span class="page-products__header-field">Категории</span>
+        <span class="page-products__header-field">Новинка</span>
+        <span class="page-products__header-field">Акция</span>
+    </div>
+    <ul class="page-products__list" style="position:relative;">
+    ';
+
     foreach($array as $key => $val) {
         ($val['new'] == '0') ? ($new = 'Нет') : ($new = 'Да');
         ($val['sale'] == '0') ? ($sale = 'Нет') : ($sale = 'Да');
         echo         '
         <li class="product-item page-products__item " id="id_' . $val['ID'] . '">
-        
           <b class="product-item__name">' . $val['name'] . '</b>
           <span class="product-item__field">' . $val['ID'] . '</span>
           <span class="product-item__field">' . number_format($val['price'],2,',',' ') . '</span>
@@ -76,8 +62,7 @@ function createProductsTable ($array)
           <span class="product-item__field">' . $sale . '</span>
           <a href="/admin/products/add/index.php?change_id=' . $val['ID'] .'" class="product-item__edit" aria-label="Редактировать"></a>
           <button class="product-item__delete" onclick="delProduct(' . $val['ID']. ')"></button>
-          
         </li>';
     }
-    echo '  </ul>';
+    echo '</ul>';
 }

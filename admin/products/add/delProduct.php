@@ -1,14 +1,13 @@
 <?php
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/php/cookieHandler.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/php/serverCred.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/connect.php';
 
 $out = json_decode(file_get_contents('php://input'));
 
-$connect = new mysqli($host, $user, $passwordSql, $dbname);
-mysqli_set_charset($connect,'utf8'); 
+$connect = connectSQL();
 
-if(mysqli_connect_errno()) {
+if (mysqli_connect_errno()) {
     $message = 'Возникла ошибка, повторите попытку позже';
 } else {
     $id = $connect->real_escape_string($out);
@@ -16,7 +15,7 @@ if(mysqli_connect_errno()) {
         $resultCG = mysqli_query($connect, "DELETE FROM `category_good` WHERE (`goods_id` = '$id');");
         $resultG = mysqli_query($connect, "DELETE FROM `goods` WHERE (`id` = '$id');");
         
-        if($resultCG && $resultG) {
+        if ($resultCG && $resultG) {
             echo json_encode(true);
         } else {
             echo json_encode('Не удалось удалить товар');
@@ -24,7 +23,5 @@ if(mysqli_connect_errno()) {
     } else {
         echo json_encode('Ошибка прав доступа');
     }
-
 }
-
 mysqli_close($connect);

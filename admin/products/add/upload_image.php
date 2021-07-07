@@ -35,11 +35,10 @@ if ($diff == 0) {
 	}		
 }	
  
-$response = array(); 
+$response = []; 
 foreach ($files as $file) {
 	$error = $data  = '';
  
-	// Проверим на ошибки загрузки.
 	$ext = mb_strtolower(mb_substr(mb_strrchr(@$file['name'], '.'), 1));
 	if (!empty($file['error']) || empty($file['tmp_name']) || $file['tmp_name'] == 'none') {
 		$error = 'Не удалось загрузить файл.';
@@ -52,16 +51,14 @@ foreach ($files as $file) {
 		if (empty($info[0]) || empty($info[1]) || !in_array($info[2], array(1, 2, 3))) {
 			$error = 'Недопустимый тип файла';
 		} else {
-			// Перемещаем файл в директорию с новым именем.
 			$name  = time() . '-' . mt_rand(1, 9999999999);
 			$src   = $tmp_path . $name . '.' . $ext;
 			$thumb = $tmp_path . $name . '-thumb.' . $ext;
 			
 			if (move_uploaded_file($file['tmp_name'], $src)) {
-				// Создание миниатюры.
 				switch ($info[2]) { 
 					case 1: 
-						$im = imageCreateFromGif($src);
+						$im = imageCreateFromGif ($src);
 						imageSaveAlpha($im, true);
 						break;					
 					case 2: 
@@ -75,8 +72,7 @@ foreach ($files as $file) {
  
 				$width  = $info[0];
 				$height = $info[1];
- 
-				// Высота превью 100px, ширина рассчитывается автоматически.
+
 				$h = 100; 
 				$w = ($h > $height) ? $width : ceil($h / ($height / $width));
 				$tw = ceil($h / ($height / $width));
@@ -107,7 +103,7 @@ foreach ($files as $file) {
  
 				// Сохранение.
 				switch ($info[2]) {
-					case 1: imageGif($new_im, $thumb); break;			
+					case 1: imageGif ($new_im, $thumb); break;			
 					case 2: imageJpeg($new_im, $thumb, 100); break;			
 					case 3: imagePng($new_im, $thumb); break;
 				}
@@ -115,11 +111,10 @@ foreach ($files as $file) {
 				imagedestroy($im);
 				imagedestroy($new_im);
 					
-				// Вывод в форму: превью, кнопка для удаления и скрытое поле.
 				$data = '
 				<div class="img-item">
-					<img src="' . $url_path . $name . '-thumb.' . $ext . '">
-					<a herf="#" onclick="remove_img(this); return false;"></a>
+					<img src="' . $url_path . $name . '-thumb.' . $ext . '" alt="' . $name . '-img">
+					<button onclick="remove_img(this); return false;"></button>
 					<input type="hidden" name="images[]" value="' . $name . '.' . $ext . '">
 				</div>';
 			} else {
@@ -127,11 +122,9 @@ foreach ($files as $file) {
 			}
 		}
 	}
-		
 	$response[] = array('error' => $error, 'data'  => $data);
 }
  
-// Ответ в JSON.
 header('Content-Type: application/json');
 echo json_encode($response, JSON_UNESCAPED_UNICODE);
 exit();

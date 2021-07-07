@@ -5,32 +5,26 @@
  */
 function createUsersArray ()
 {
-  include $_SERVER['DOCUMENT_ROOT'] . '/php/serverCred.php';
-  $usersList = [];
+    include $_SERVER['DOCUMENT_ROOT'] . '/connect.php';
+    $usersList = [];
 
-  $line = "SELECT users.*, r.name as role, roles_id  FROM users
-  left join role_user as ru on ru.users_id=users.id
-  left join roles as r on r.id=roles_id order by roles_id asc, users.id asc";
-  
-  $connect = new mysqli($host, $user, $passwordSql, $dbname);
-  mysqli_set_charset($connect,'utf8'); 
-
-  if(mysqli_connect_errno()) {
-  
-    return $usersList;
-
-  } else {
+    $line = "SELECT users.*, r.name AS role, roles_id  FROM users
+    LEFT JOIN role_user AS ru ON ru.users_id=users.id
+    LEFT JOIN roles AS r ON r.id=roles_id ORDER BY roles_id ASC, users.id ASC";
     
-    $result = mysqli_query($connect, $line);
+    $connect = connectSQL();
     
-    while($row = mysqli_fetch_assoc($result)) {
-        array_push($usersList, $row);
-    }; 
-    return $usersList;
-  } 
-  mysqli_close($connect);
-
-  
+    if (mysqli_connect_errno()) {
+        mysqli_close($connect);
+        return $usersList;
+    } else {
+        $result = mysqli_query($connect, $line);
+        while ($row = mysqli_fetch_assoc($result)) {
+            array_push($usersList, $row);
+        }
+        mysqli_close($connect);
+        return $usersList;
+    }
 }
 /**
  * функция  возвращает таблицу с товарами
@@ -38,9 +32,9 @@ function createUsersArray ()
  */
 function createUsersTable (array $array)
 {
-  if (empty($array)) {
-    echo "<h3 class='red'>Возникла ошибка</h3>";
-  } elseif (isset($_COOKIE['login']) && isset($_SESSION['roles_id']) && $_SESSION['roles_id'] == '1') {
+    if (empty($array)) {
+        echo "<h3 class='red'>Возникла ошибка</h3>";
+    } elseif (isset($_COOKIE['login']) && isset($_SESSION['roles_id']) && $_SESSION['roles_id'] == '1') {
         echo '
         <div class="page-products__header">
             <span class="page-products__header-field product-item__field__name">Имя</span>
@@ -54,8 +48,7 @@ function createUsersTable (array $array)
         <ul class="page-products__list" style="position:relative;"">';
         foreach($array as $key => $val) {
             echo         '
-            <li class="product-item page-products__item " id="id_' . $val['id'] . '">
-            
+            <li class="product-item page-products__item " id="id_' . $val['id'] . '">    
                 <b class="product-item__name product-item__field__name">' . $val['name'] . '</b>
                 <span class="product-item__field product-item__field__id">' . $val['id'] . '</span>
                 <span class="product-item__field">' . $val['surname'] . '</span>
@@ -63,7 +56,6 @@ function createUsersTable (array $array)
                 <span class="product-item__field">' . $val['phone'] . '</span>
                 <span class="product-item__field product-item__field__login">' . $val['login'] . '</span>
                 <span class="product-item__field" id="role_' . $val['id'] . '">' . $val['role'] . '</span>
-                
                 <select class="product-item__field custom-form__select order" style="width:200px" name="role_id" id="change_' . $val['id'] . '" onchange="change(' . $val['id'] . ')" hidden="">
                     <option hidden="">Права доступа</option>
                     <option value="1">Admin</option>
@@ -71,7 +63,6 @@ function createUsersTable (array $array)
                     <option value="3">Buyer</option>
                 </select>
                 <button style="outline:none; border: 0px;cursor:pointer;" id=change_role_' . $val['id'] .'" class="product-item__edit" aria-label="Редактировать" onclick="changeUserRole(' . $val['id']. ')"></button>
-                
             </li>';
         }
         echo '</ul>';
@@ -80,5 +71,4 @@ function createUsersTable (array $array)
         <div><button class='page-delivery__button button' OnClick='history.back();'>Назад</и></div>
         ";
     }
-
 }

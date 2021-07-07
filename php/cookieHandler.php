@@ -15,18 +15,15 @@ ini_set('display_errors', '1');
  */
 function setSession($data)
 {
-        $_SESSION['auth'] = 'true';
-        if (isset($data['password'])) {
-            $_SESSION['password'] = $data['password'];
-        } 
-        if (isset($data['id'])) {
-            $_SESSION['users_id'] = $data['id'];
-        } 
-        if (isset($data['roles_id'])) {
-            $_SESSION['roles_id'] = $data['roles_id'];
-        }
-
-        
+    if (isset($data['password'])) {
+        $_SESSION['password'] = $data['password'];
+    } 
+    if (isset($data['id'])) {
+        $_SESSION['users_id'] = $data['id'];
+    } 
+    if (isset($data['roles_id'])) {
+        $_SESSION['roles_id'] = $data['roles_id'];
+    }   
 }
 
 /**
@@ -43,13 +40,12 @@ function deleteSession()
  */
 function createCookie($data)
 {
-        if (isset($data['login'])) {
-            setcookie('login', $data['login'], time() + 60 * 60 * 24 * 31, "/");
-        }
-        if(isset($data['name'])) {
-            setcookie('name', $data['name'], time() + 60 * 60 * 24 * 31, "/");
-        }
-    
+    if (isset($data['login'])) {
+        setcookie('login', $data['login'], time() + 60 * 60 * 24 * 31, "/");
+    }
+    if (isset($data['name'])) {
+        setcookie('name', $data['name'], time() + 60 * 60 * 24 * 31, "/");
+    }   
 }
 /**
  * функция устанавливает и продлевает куки изменений
@@ -57,10 +53,9 @@ function createCookie($data)
  */
 function createCookieAddChange($str)
 {
-        if (isset($str)) {
-            setcookie('add/change', $str, time() + 60 * 60 * 24 * 31, "/");
-        }
-    
+    if (isset($str)) {
+        setcookie('add/change', $str, time() + 60 * 60 * 24 * 31, "/");
+    }
 }
 
 /**
@@ -82,9 +77,9 @@ function delCookie()
     if (isset($_COOKIE['login'])) {
         unset($_COOKIE['login']);  
         setcookie('login', '', time() - 1, '/');
-      }
-      if (isset($_COOKIE['name'])) {
-        unset($_COOKIE['name']);  
-        setcookie('name', '', time() - 1, '/');
-      }
+    }
+    if (isset($_COOKIE['name'])) {
+    unset($_COOKIE['name']);  
+    setcookie('name', '', time() - 1, '/');
+    }
 }
