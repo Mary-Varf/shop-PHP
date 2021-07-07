@@ -18,8 +18,8 @@ $menuAdmin = [
 
 /**
  * функция возвращает пункт меню
- * @param массив с меню
- * @param строку с цветом
+ * @param array с меню
+ * @param string с цветом
  */
 
 function createLi ($arr, $color) 
@@ -33,7 +33,7 @@ function createLi ($arr, $color)
 
 /**
  * функция возвращает ul меню 
- * @param массив с меню
+ * @param array с меню
  */
 function createMenu(array $menu, $str)
 {
@@ -44,8 +44,8 @@ function createMenu(array $menu, $str)
 
 /**
  * функция возвращает меню с разной длиной в зависимости от статуса юзера
- * @param массив с меню
- * @param строку с длиной масиива
+ * @param array с меню
+ * @param string с длиной масиива
  */
 
 function menuList($menu, $menuLength)

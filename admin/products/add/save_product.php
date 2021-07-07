@@ -30,7 +30,7 @@ function saveCategoryDB(string $id, $connect)
     if (!empty($_POST['category'])) {
         $category = $_POST['category'];
         foreach($category as $key => $val) {
-            $resultCat = mysqli_query($connect, "INSERT INTO `category_good` (`goods_id`, `categories_id`) VALUES ('$id', '$val');");
+            $resultCat = mysqli_query($connect, "INSERT INTO `category_good` (`goods_id`, `categories_id`) VALUES ('$id', '$val')");
         }
     }
     if (isset($resultCat)) {
@@ -50,10 +50,10 @@ if (mysqli_connect_errno()) {
             echo json_encode(false);
         } else {
             if (isset($_POST['id'])) {
-                $id = $connect->real_escape_string($_POST['id']);
+                $id = intval($_POST['id']);
             } 
             $name = $connect->real_escape_string($_POST['productName']);
-            $price = $connect->real_escape_string($_POST['productPrice']);
+            $price = intval($_POST['productPrice']);
             $new = ((isset($_POST['newProd']) && $_POST['newProd'] == 'new') ? '1' : '0');
             $sale = ((isset($_POST['sale']) && $_POST['sale'] == 'sale') ? '1' : '0');            
             $oldImg = (isset($_POST['oldImg']) ? $connect->real_escape_string($_POST['oldImg']) : '0');
@@ -66,7 +66,7 @@ if (mysqli_connect_errno()) {
                     $resultCat = saveCategoryDB($insert_id, $connect);
 
                     if ($result && $resultCat) {
-                        if (!empty($filename) && is_file($tmp_path . $filename)) {
+                        if (is_file($tmp_path . $filename)) {
                             rename($tmp_path . $filename, $path . $filename);
                             $nameArr = explode('.', $filename);
                             $file_name = pathinfo($filename, PATHINFO_FILENAME);
@@ -84,15 +84,15 @@ if (mysqli_connect_errno()) {
             } elseif (isset($_POST['change']) && isset($_POST['id']) && !empty($_POST['images']) && $_POST['images'] != '') {
                 $id = $connect->real_escape_string($_POST['id']);
                 $filename = preg_replace("/[^a-z0-9\.-]/i", '', $_POST['images'][0]);
-                $result = mysqli_query($connect, "UPDATE `goods` SET `name` = '$name', `price` = '$price', `new` = '$new', `sale`='$sale', `img` = '/img/products/$filename' WHERE (`id` = '$id');");
-                $resultDelCat = mysqli_query($connect, "DELETE FROM `category_good` WHERE (`goods_id` = '$id');");
+                $result = mysqli_query($connect, "UPDATE `goods` SET `name` = '$name', `price` = '$price', `new` = '$new', `sale`='$sale', `img` = '/img/products/$filename' WHERE `id` = '$id'");
+                $resultDelCat = mysqli_query($connect, "DELETE FROM `category_good` WHERE `goods_id` = '$id'");
                 $resultCat = saveCategoryDB($id, $connect);
 
                 if ($result && $resultCat && $resultDelCat) {
                     if (("/img/products/" . $_POST['images'][0]) != $oldImg) {
                         $dir = $_SERVER['DOCUMENT_ROOT']  . strval($oldImg);
                         unlink($dir);
-                        if (!empty($filename) && is_file($tmp_path . $filename)) {
+                        if (is_file($tmp_path . $filename)) {
                             rename($tmp_path . $filename, $path . $filename);
                             $nameArr = explode('.', $filename);
                             $file_name = pathinfo($filename, PATHINFO_FILENAME);

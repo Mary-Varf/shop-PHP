@@ -32,8 +32,8 @@
         <input id="thirdName" class="custom-form__input" type="text" name="thirdName" value="<?php echo htmlspecialchars($data['patronymic'] ?? ''); ?>" placeholder='Отчество'>
         <input id="phone" class="custom-form__input" type="tel" name="phone" required="" value="<?php echo htmlspecialchars($data['phone'] ?? ''); ?>" placeholder='Телефон*'>
         <input id="email" class="custom-form__input" type="email" name="email" required="" value="<?php echo htmlspecialchars($data['login'] ?? ''); ?>" placeholder='Почта*'>
-        <input class="custom-form__input" required="" id="password" required  size="30" name="password" type="password" minlength="3" placeholder='Ваш пароль:'>
-        <input class="custom-form__input" required="" id="passwordVer" required  size="30" name="passwordVer" type="password" minlength="3" placeholder='Повторите пароль:'>
+        <input class="custom-form__input" id="password" required  size="30" name="password" type="password" minlength="3" placeholder='Ваш пароль:'>
+        <input class="custom-form__input" id="passwordVer" required  size="30" name="passwordVer" type="password" minlength="3" placeholder='Повторите пароль:'>
         <div class="error" style='color:red; margin: 20px 0;'></div>
         <button class="button" name='send' id='reg-enter' type="submit">Регистрация</button>
         <input type="text" hidden name="productID" id="productID" value='<?php echo (isset($_GET['productID']) ? $_GET['productID'] : ''); ?>'>

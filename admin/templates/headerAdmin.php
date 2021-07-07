@@ -4,10 +4,10 @@
      */
     include $_SERVER['DOCUMENT_ROOT'] . '/admin/templates/menu.php';
 ?>
-<header class="page-header">
+<header class="page-header container">
     <a class="page-header__logo" style="display:block"  href="/admin/"><img src="/img/logo.svg" alt="Fashion"></a>
     <nav class='page-header__menu'>
-        <?php echo createMenu($menuAdmin, 'header'); ?>
+        <?php createMenu($menuAdmin, 'header'); ?>
     </nav>
     <?php
         if (isset($_COOKIE['name']) && isset($_SESSION['password'])) {

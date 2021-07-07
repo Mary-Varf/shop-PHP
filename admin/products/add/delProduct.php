@@ -10,10 +10,10 @@ $connect = connectSQL();
 if (mysqli_connect_errno()) {
     $message = 'Возникла ошибка, повторите попытку позже';
 } else {
-    $id = $connect->real_escape_string($out);
+    $id = intval($out);
     if (isset($_SESSION['roles_id']) && $_SESSION['roles_id'] == '1') {
-        $resultCG = mysqli_query($connect, "DELETE FROM `category_good` WHERE (`goods_id` = '$id');");
-        $resultG = mysqli_query($connect, "DELETE FROM `goods` WHERE (`id` = '$id');");
+        $resultCG = mysqli_query($connect, "DELETE FROM `category_good` WHERE `goods_id` = '$id'");
+        $resultG = mysqli_query($connect, "DELETE FROM `goods` WHERE `id` = '$id'");
         
         if ($resultCG && $resultG) {
             echo json_encode(true);

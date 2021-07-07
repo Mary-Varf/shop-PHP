@@ -19,7 +19,7 @@
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/admin/templates/headerAdmin.php'; ?>
 <main class="page-products">
     <h1 class="h h--1">Настройка прав доступа</h1>
-    <?php echo createUsersTable(createUsersArray()); ?>
+    <?php createUsersTable(createUsersArray()); ?>
 </main>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/admin/templates/footerAdmin.php'; ?>
 </body>

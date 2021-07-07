@@ -2,8 +2,8 @@
 
 /**
  * функция возвращает список категорий
- * @param массив с вариантами категорий
- * @param строку выбрано или нет
+ * @param array с вариантами категорий
+ * @param string выбрано или нет
  */
 
 function options ($arr, $str)
@@ -16,7 +16,7 @@ function options ($arr, $str)
 
 /**
  * функция определяет выбранна категория или нет
- * @param массив с категориями из бд
+ * @param array с категориями из бд
  */
 function createCategoriesOptions(array $data)
 {  

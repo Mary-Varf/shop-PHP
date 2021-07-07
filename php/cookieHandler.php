@@ -59,17 +59,6 @@ function createCookieAddChange($str)
 }
 
 /**
- * функция удаляет куки изменений
- */
-function delCookieAddChange()
-{
-    if (isset($_COOKIE['add/change'])) {
-        unset($_COOKIE['add/change']);  
-        setcookie('add/change', '', time() - 1, "/");
-    }
-}
-
-/**
  * функция удаляет куки логина и имени
  */
 function delCookie()

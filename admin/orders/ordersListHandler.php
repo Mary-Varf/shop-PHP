@@ -1,7 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/php/cookieHandler.php';
 /**
- * функция возвращает массив со списком заявок (проверка на права)
+ * функция возвращает array со списком заявок (проверка на права)
  */
 function createList()
 {
@@ -16,7 +16,7 @@ function createList()
 
 /**
  * функция возвращает таблицу с данными о заявках
- * @param массив с заявками
+ * @param array с заявками
  */
 
 function showOrderInfo ($arr)
@@ -97,7 +97,7 @@ function showOrderInfo ($arr)
 } 
 
 /**
- * функция возвращает массив с данными о заявках из бд
+ * функция array с данными о заявках из бд
  */
 function getOrdersData()
 {
@@ -118,8 +118,7 @@ function getOrdersData()
         LEFT JOIN good_order AS go ON go.orders_id = i.orders_id 
         LEFT JOIN goods AS g ON go.goods_id = g.id
         LEFT JOIN users AS u ON u.id = orders.users_id
-        ORDER BY orders_id DESC
-        ;");
+        ORDER BY orders_id DESC");
         
         if ($result && $result->num_rows > 0) {
             $orders = [];
@@ -129,10 +128,10 @@ function getOrdersData()
                 array_push($orders, $row);
             }
             foreach($orders as $key => $val) {
-                if ($val['status'] == '0') {
-                    array_push($notExecuted, $val);
-                } else {
+                if ($val['status']) {
                     array_push($executed, $val);
+                } else {
+                    array_push($notExecuted, $val);
                 }
             }
             echo '<div><button class="page-delivery__button button" OnClick="history.back();">Назад</button></div><br>';

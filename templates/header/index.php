@@ -23,7 +23,7 @@
 	<script defer src="/js/scripts3.js"></script>
 </head>
 <body class='body'>
-<header class="page-header">
+<header class="page-header container"> 
     <a class="page-header__logo" style="display:block"  href="/"><img src="/img/logo.svg" alt="Fashion"></a>
     <nav class='page-header__menu'>
     <?php createMenu($menu); ?>

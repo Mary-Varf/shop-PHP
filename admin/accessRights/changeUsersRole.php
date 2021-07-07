@@ -19,7 +19,7 @@ if (mysqli_connect_errno()) {
                 $role = $val;
             }
         }
-        $result = mysqli_query($connect, "UPDATE `role_user` SET `roles_id` = '$role' WHERE (`users_id` = '$id');");
+        $result = mysqli_query($connect, "UPDATE `role_user` SET `roles_id` = '$role' WHERE `users_id` = '$id'");
         if ($result) {
             echo json_encode($role);
         } else {

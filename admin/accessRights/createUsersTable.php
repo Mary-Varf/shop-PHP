@@ -1,7 +1,7 @@
 <?php
 /**
  * функция  возвращает массив с товарами
- * @return массив с товарами либо пустой массив
+ * @return array с товарами либо пустой массив
  */
 function createUsersArray ()
 {
@@ -15,7 +15,6 @@ function createUsersArray ()
     $connect = connectSQL();
     
     if (mysqli_connect_errno()) {
-        mysqli_close($connect);
         return $usersList;
     } else {
         $result = mysqli_query($connect, $line);
@@ -28,7 +27,7 @@ function createUsersArray ()
 }
 /**
  * функция  возвращает таблицу с товарами
- * @param массив с товарами
+ * @param array с товарами
  */
 function createUsersTable (array $array)
 {

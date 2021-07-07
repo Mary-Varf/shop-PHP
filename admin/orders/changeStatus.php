@@ -8,20 +8,20 @@ $connect = connectSQL();
 if (mysqli_connect_errno()) {
     echo json_encode('Не выполнено');
 } else {
-    $id = $connect->real_escape_string($out['id']);
-    $getStatus = mysqli_query($connect, "SELECT status FROM `orders` WHERE (`id` = '$id')");
+    $id = intval($out['id']);
+    $getStatus = mysqli_query($connect, "SELECT status FROM `orders` WHERE `id` = '$id'");
     $statusArr = [];
     while($row = mysqli_fetch_assoc($getStatus)) {
         array_push($statusArr, $row);
     }
-    $status = ($statusArr[0]['status']=='0' ? '1' : '0');
-    $result = mysqli_query($connect, "UPDATE `orders` SET `status` = '$status' WHERE (`id` = '$id');");
+    $status = ($statusArr[0]['status'] == '0' ? '1' : '0');
+    $result = mysqli_query($connect, "UPDATE `orders` SET `status` = '$status' WHERE `id` = '$id'");
     
     if ($result) {
-        if ($status == '0') {
-            echo json_encode('Не обработан');
-        } else {
+        if ($status) {
             echo json_encode('Обработан');
+        } else {
+            echo json_encode('Не обработан');
         }
     } else {
         echo json_encode('Не выполнено');

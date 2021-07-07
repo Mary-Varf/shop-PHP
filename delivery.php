@@ -1,4 +1,4 @@
-<?
+<?php
     include $_SERVER['DOCUMENT_ROOT'] . '/php/cookieHandler.php';
     include $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 ?>

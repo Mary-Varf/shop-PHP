@@ -36,11 +36,11 @@ function orderProduct($msg)
                     $message = createMsg($msg[3]);
                 } else {
                     $resultAuth = mysqli_query($connect, "SELECT login, users.id FROM users
-                    where login='$login' and password='$password';");
+                    WHERE login='$login' and password='$password';");
                     if ($resultAuth && $resultAuth->num_rows > 0) {
                         $data = $resultAuth->fetch_array();
                         if (is_array($data)) {
-                            $prodId = $connect->real_escape_string(intval(substr($_GET['productID'], 14)));
+                            $prodId = intval(substr($_GET['productID'], 14);
                             $resultPrice = mysqli_query($connect, "SELECT price FROM `goods` WHERE id=$prodId;");
                             while ($row = mysqli_fetch_assoc($resultPrice)) {
                                 $price = $row['price'];
@@ -88,7 +88,6 @@ function getUsersInfo ()
     $login = (isset($_COOKIE['login']) ? $_COOKIE['login'] : '');
     $password = (isset($_SESSION['password']) ? $_SESSION['password'] : '');
 
-    $data = [];
     $connect = connectSQL();
 
     if (mysqli_connect_errno()) {

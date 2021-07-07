@@ -74,6 +74,7 @@
                             if (isset($_GET)) {
                                 foreach($_GET as $key => $val) {
                                     if ($key == 'order' || $key == 'sort' || $key == 'page') {
+                                        continue;
                                     } else {
                                         echo "<input type='hidden' name=" . $key . " value=" . $val . ">";
                                     }
@@ -97,10 +98,10 @@
                 </form>
             </div>
             <div class="shop__list">
-                <?php echo createGoodsDivs($page, manageOrder(createGoodsArray(), (isset($_GET['order']) ? ($_GET['order']) : ''), (isset($_GET['sort']) ? ($_GET['sort']) : ''))); ?> 
+                <?php createGoodsDivs($page, manageOrder(createGoodsArray(), (isset($_GET['order']) ? ($_GET['order']) : ''), (isset($_GET['sort']) ? ($_GET['sort']) : ''))); ?> 
             </div>
             <ul class="shop__paginator paginator" style='align-items:center'>
-                <?php echo createPagination(createGoodsArray(), $page);?>
+                <?php createPagination(createGoodsArray(), $page);?>
             </ul>
         </div>
     </div>

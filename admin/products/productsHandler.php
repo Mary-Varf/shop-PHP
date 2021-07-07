@@ -31,7 +31,7 @@ function createProductsArray ()
 }
 /**
  * функция  возвращает данные таблицы с товарами
- * @param принимает массив с товарами
+ * @param array с товарами
  */
 function createProductsTable ($array)
 {

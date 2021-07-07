@@ -12,7 +12,7 @@ if (mysqli_connect_errno()) {
     } else {
         $login = $connect->real_escape_string($out['email']);
         $password = $connect->real_escape_string($out['password']);
-        $productID = $connect->real_escape_string($out['productID']);
+        $productID = intval($out['productID']);
     
         $hash = password_hash($password, PASSWORD_BCRYPT);
         $result = mysqli_query($connect, "SELECT login, name, password, users.id, ru.roles_id FROM users LEFT JOIN role_user AS ru ON users.id = ru.users_id WHERE login='$login';");

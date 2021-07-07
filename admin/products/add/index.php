@@ -111,9 +111,9 @@ if (isset($_GET['change_id'])) {
                     <?php createCategoriesOptions((isset($data[0]['categories_id']) ? $data : [])) ?>
                 </select>
             </div>
-            <input type="checkbox" name="newProd" id="newProd" value='new' class="custom-form__checkbox"  <?php if (isset($data[0])) {echo (($data[0]['new'] == '0') ? '' : 'checked');} ?>>
+            <input type="checkbox" name="newProd" id="newProd" value='new' class="custom-form__checkbox"  <?php if (isset($data[0])) {echo ((!$data[0]['new']) ? '' : 'checked');} ?>>
             <label for="newProd" class="custom-form__checkbox-label">Новинка</label>
-            <input type="checkbox" name="sale" id="sale" value='sale' class="custom-form__checkbox" <?php if (isset($data[0])) {echo (($data[0]['sale'] == '0') ? '' : 'checked');} ?>>
+            <input type="checkbox" name="sale" id="sale" value='sale' class="custom-form__checkbox" <?php if (isset($data[0])) {echo ((!$data[0]['sale']) ? '' : 'checked');} ?>>
             <label for="sale" class="custom-form__checkbox-label">Распродажа</label>
         </fieldset>
         <div class="errorBlock"></div>
