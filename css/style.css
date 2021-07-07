@@ -402,7 +402,7 @@ a:focus {
 
 .page-header {
   position: relative;
-  padding: 20px 60px;
+  padding: 20px 0px;
   display: flex;
   justify-content: space-between;
   /* justify-content: space-evenly; */
