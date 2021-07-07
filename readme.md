@@ -10,6 +10,6 @@
 **NOW WITH DRAG AND DROP**
 
 <p align="center">
-<img src="https://giphy.com/embed/jbciY8LeiaGrIyW09h" width="60%"></p>
+<img src="https://media.giphy.com/media/jbciY8LeiaGrIyW09h/source.gif" width="60%"></p>
 <p align="center">
 <img src="https://giphy.com/embed/OdwAoy4FCei1qCglQF" width="60%"></p>
