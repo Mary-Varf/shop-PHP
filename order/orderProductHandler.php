@@ -40,8 +40,8 @@ function orderProduct($msg)
                     if ($resultAuth && $resultAuth->num_rows > 0) {
                         $data = $resultAuth->fetch_array();
                         if (is_array($data)) {
-                            $prodId = intval(substr($_GET['productID'], 14);
-                            $resultPrice = mysqli_query($connect, "SELECT price FROM `goods` WHERE id=$prodId;");
+                            $prodId = intval(substr($_GET['productID'], 14));
+                            $resultPrice = mysqli_query($connect, "SELECT price FROM `goods` WHERE id=$prodId");
                             while ($row = mysqli_fetch_assoc($resultPrice)) {
                                 $price = $row['price'];
                             }
